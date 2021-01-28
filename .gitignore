@@ -39,3 +39,10 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# firebase
+.firebaserc
+.github/
+android/
+ios/
+build/
