@@ -62,15 +62,20 @@ class _AddPostPageState extends State<AddPostPage> {
                   onPressed: () async {
                     final postedDate =
                         Timestamp.fromDate(DateTime.now()); // 現在の日時
-                    final email = widget.user.email; // AddPostPage のデータを参照
+                    final yyyy = DateFormat('yyyy').format(postedDate.toDate());
+                    final mm = DateFormat('MM').format(postedDate.toDate());
+                    final dd = DateFormat('dd').format(postedDate.toDate());
+
                     // 投稿メッセージ用ドキュメント作成
                     debugPrint( "postedDate : " + DateFormat('yyyy/MM/dd HH:mm').format(postedDate.toDate()) );
                     logger.v("Verbose log");
-                    await FirebaseFirestore.instance.collection('posts')
+                    await FirebaseFirestore.instance.collection('diary')
                       .add({
-                        'text': messageText,
-                        'email': email,
-                        'date': postedDate
+                        'diary': messageText,
+                        'diary_date': postedDate,
+                        'yyyy': yyyy,
+                        'mm': mm,
+                        'dd': dd
                       })
                       .then((value) => print("post Added"))
                       .catchError((error) => print("Failed to add user: $error"));

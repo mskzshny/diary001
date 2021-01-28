@@ -31,8 +31,8 @@ class ChatPage extends StatelessWidget {
               // 投稿メッセージ一覧を取得（非同期処理）
               // 投稿日時でソート
               future: FirebaseFirestore.instance
-                  .collection('posts')
-                  .orderBy('date')
+                  .collection('diary')
+                  .orderBy('diary_date', descending: true)
                   .get(),
               builder: (context, snapshot) {
                 // データが取得できた場合
@@ -43,17 +43,17 @@ class ChatPage extends StatelessWidget {
                   return ListView(
                     children: documents.map((document) {
                       String formattedDate = "";
-                      if (document['date'] is Timestamp) {
+                      if (document['diary_date'] is Timestamp) {
                         debugPrint( "date is timestamp");
-                        formattedDate = DateFormat('yyyy/MM/dd HH:mm').format(document['date'].toDate());
+                        formattedDate = DateFormat('yyyy/MM/dd').format(document['diary_date'].toDate());
                       }
                       else{
                         debugPrint( "what is date ?");
                       }
                       return Card(
                         child: ListTile(
-                          title: Text(document['text']),
-                          subtitle: Text(formattedDate + ":" + document['email']),
+                          title: Text(document['diary']),
+                          subtitle: Text(formattedDate),
                         ),
                       );
                     }).toList(),
