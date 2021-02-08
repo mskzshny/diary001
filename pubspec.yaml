@@ -1,5 +1,5 @@
-name: flutter_app_001
-description: A new Flutter application.
+name: diary001
+description: Diary001
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -28,6 +28,7 @@ dependencies:
   cloud_firestore: "^0.16.0"
   intl: ^0.16.1 
   logger: ^0.9.4
+  provider: ^4.3.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -18,7 +18,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '1.0.0'
 }
 
 apply plugin: 'com.android.application'
@@ -47,11 +47,14 @@ android {
 
         // 追記
         multiDexEnabled true
+        versionCode 4
+        versionName "1.0.3"
     }
 
+    // 追記
     signingConfigs {
         release {
-            storeFile file("release.keystore")
+            storeFile file("release.jks")
             storePassword "1q3w2e4r"
             keyAlias "key0"
             keyPassword "1q3w2e4r"

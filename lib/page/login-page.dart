@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import './chat-page.dart';
+import 'diary-page.dart';
 
 // ログイン画面用Widget
 class LoginPage extends StatefulWidget {
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
                           // ユーザー情報を渡す
-                          return ChatPage(user);
+                          return DiaryPage(user);
                         }),
                       );
                     } catch (e) {
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
                           // ユーザー情報を渡す
-                          return ChatPage(user);
+                          return DiaryPage(user);
                         }),
                       );
                     } catch (e) {

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
-import './chat-page.dart';
+import 'diary-page.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -69,8 +69,9 @@ class _AddPostPageState extends State<AddPostPage> {
                     // 投稿メッセージ用ドキュメント作成
                     debugPrint( "postedDate : " + DateFormat('yyyy/MM/dd HH:mm').format(postedDate.toDate()) );
                     logger.v("Verbose log");
-                    await FirebaseFirestore.instance.collection('diary')
-                      .add({
+                    await FirebaseFirestore.instance.collection('diary').doc(DateFormat('yyyyMMdd').format(postedDate.toDate())+user.uid)
+                      .set({
+                        'user_uid': user.uid,
                         'diary': messageText,
                         'diary_date': postedDate,
                         'yyyy': yyyy,
@@ -80,10 +81,17 @@ class _AddPostPageState extends State<AddPostPage> {
                       .then((value) => print("post Added"))
                       .catchError((error) => print("Failed to add user: $error"));
                     // 1つ前の画面に戻る
+                    /*
                     await Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) {
-                        return ChatPage(user);
+                        return DiaryPage(user);
                       }),
+                    );
+                    */
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => DiaryPage(user)),
+                      (Route<dynamic> route) => false,
                     );
                   },
                 ),

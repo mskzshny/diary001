@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
                           // ユーザー情報を渡す
-                          return ChatPage(user);
+                          return DiaryPage(user);
                         }),
                       );
                     } catch (e) {
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
                           // ユーザー情報を渡す
-                          return ChatPage(user);
+                          return DiaryPage(user);
                         }),
                       );
                     } catch (e) {
@@ -150,9 +150,9 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 // チャット画面用Widget
-class ChatPage extends StatelessWidget {
+class DiaryPage extends StatelessWidget {
   // 引数からユーザー情報を受け取れるようにする
-  ChatPage(this.user);
+  DiaryPage(this.user);
 
   // ユーザー情報
   final FirebaseUser user;

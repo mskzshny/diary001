@@ -1,4 +1,43 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionId": "diary",
+      "fields": [
+        {
+          "fieldPath": "user_uid",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "diary_date",
+          "mode": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "diary",
+      "fields": [
+        {
+          "fieldPath": "user_uid",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "mm",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "dd",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "diary_date",
+          "mode": "DESCENDING"
+        }
+      ]
+    }
+    
+  ],
   "fieldOverrides": []
+
+
+
 }
