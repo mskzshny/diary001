@@ -32,7 +32,7 @@ class DiaryApp extends StatelessWidget {
       ),
       // ログイン画面を表示
       home: LoginPage()
-    
+   
     );
   }
 }
