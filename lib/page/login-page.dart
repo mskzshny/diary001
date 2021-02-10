@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                           return MultiProvider(
                             providers: [
                               // Injects HomeViewModel into this widgets.
-                              ChangeNotifierProvider(create: (_) => DiaryViewModel()),
+                              ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
                             ],
                             child: DefaultTabController(
                               length: 3,
