@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-
 import 'diary-page.dart';
 
 var logger = Logger(
@@ -46,7 +45,7 @@ class _AddPostPageState extends State<AddPostPage> {
                 // 複数行のテキスト入力
                 keyboardType: TextInputType.multiline,
                 // 最大3行
-                maxLines: 3,
+                maxLines: null,
                 onChanged: (String value) {
                   setState(() {
                     messageText = value;
@@ -81,18 +80,7 @@ class _AddPostPageState extends State<AddPostPage> {
                       .then((value) => print("post Added"))
                       .catchError((error) => print("Failed to add user: $error"));
                     // 1つ前の画面に戻る
-                    /*
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return DiaryPage(user);
-                      }),
-                    );
-                    */
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => DiaryPage(user)),
-                      (Route<dynamic> route) => false,
-                    );
+                    callDiaryPage(context,user);
                   },
                 ),
               )

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart';
 import 'diary-page.dart';
-import 'diary-view-model.dart';
 
 // ログイン画面用Widget
 class LoginPage extends StatefulWidget {
@@ -70,12 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                       final User user = userCredential.user;
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          // ユーザー情報を渡す
-                          return DiaryPage(user);
-                        }),
-                      );
+                      callDiaryPage(context,user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
@@ -102,21 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       final User user = userCredential.user;
                       // ログインに成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          // ユーザー情報を渡す
-                          return MultiProvider(
-                            providers: [
-                              // Injects HomeViewModel into this widgets.
-                              ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
-                            ],
-                            child: DefaultTabController(
-                              length: 3,
-                              child: DiaryPage(user)
-                            )
-                          );
-                        }),
-                      );
+                      callDiaryPage(context,user);
                     } catch (e) {
                       // ログインに失敗した場合
                       setState(() {
@@ -133,3 +111,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
