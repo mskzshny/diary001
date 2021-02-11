@@ -27,8 +27,8 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   // ②カウントを示すインスタンス変数
-  int _start = 2;
-  int _current = 1;
+  int _start = 0;
+  int _current = 0;
 
   // ③ カウントダウン処理を行う関数を定義
   void startTimer() {

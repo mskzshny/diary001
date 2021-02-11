@@ -21,10 +21,6 @@ class DiaryPage extends StatelessWidget  {
   DiaryPage(this.user){
   }
 
-
-  void _handlePressed(){
-  }
-
   @override
   Widget build(BuildContext context) {
     logger.v("build : user_uid : " + user.uid);

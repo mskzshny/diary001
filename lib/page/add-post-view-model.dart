@@ -25,6 +25,7 @@ class AddPostViewModel extends ChangeNotifier {
 
   void setMessageText(String text){
     _messageText = text;
+    notifyListeners();
   }
 
   void postDiary(User user, Timestamp postedDate) async {

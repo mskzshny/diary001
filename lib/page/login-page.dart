@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'diary-page.dart';
 import 'login-view-model.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 // ログイン画面用Widget
 class LoginPage extends StatefulWidget {
@@ -29,11 +34,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // メッセージ表示用
-  String infoText = '';
+  // String infoText = '';
 
   // 入力したメールアドレス・パスワード
-  String email = '';
-  String password = '';
+  // String email = '';
+  // String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +54,8 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
                   setState(() {
-                    email = value;
+                    // email = value;
+                    Provider.of<LoginViewModel>(context, listen: false).setEmail(value);
                   });
                 },
               ),
@@ -59,14 +65,15 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
                 onChanged: (String value) {
                   setState(() {
-                    password = value;
+                    //password = value;
+                    Provider.of<LoginViewModel>(context, listen: false).setPassword(value);
                   });
                 },
               ),
               Container(
                 padding: EdgeInsets.all(8),
                 // メッセージ表示
-                child: Text(infoText),
+                child: Text( Provider.of<LoginViewModel>(context, listen: false).infoText),
               ),
               Container(
                 width: double.infinity,
@@ -76,21 +83,16 @@ class _LoginPageState extends State<LoginPage> {
                   textColor: Colors.white,
                   child: Text('ユーザー登録'),
                   onPressed: () async {
+                    logger.v("onPressed: " );
                     try {
-                      // メール/パスワードでユーザー登録
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      final UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      final User user = userCredential.user;
+                      UserCredential userCredential = await Provider.of<LoginViewModel>(context, listen: false).createUser();
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      DiaryPage.callDiaryPage(context,user);
+                      DiaryPage.callDiaryPage(context,userCredential.user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
-                        infoText = "登録に失敗しました：${e.message}";
+                        Provider.of<LoginViewModel>(context, listen: false).setInfoText("登録に失敗しました：${e.message}");
                       });
                     }
                   },
@@ -103,21 +105,17 @@ class _LoginPageState extends State<LoginPage> {
                   textColor: Colors.blue,
                   child: Text('ログイン'),
                   onPressed: () async {
+                    logger.v("onPressed: " );
                     try {
                       // メール/パスワードでログイン
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      final UserCredential userCredential = await auth.signInWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      final User user = userCredential.user;
+                      UserCredential userCredential = await Provider.of<LoginViewModel>(context, listen: false).doLogin();
                       // ログインに成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
                       DiaryPage.callDiaryPage(context,userCredential.user);
                     } catch (e) {
-                      // ログインに失敗した場合
+                      // ユーザー登録に失敗した場合
                       setState(() {
-                        infoText = "ログインに失敗しました：${e.message}";
+                        Provider.of<LoginViewModel>(context, listen: false).setInfoText("ログインに失敗しました：${e.message}");
                       });
                     }
                   },

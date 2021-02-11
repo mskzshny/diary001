@@ -20,14 +20,35 @@ class LoginViewModel extends ChangeNotifier {
   String _password = "";
   String get password => _password;
 
+  String _infoText = "";
+  String get infoText => _infoText;
+
   LoginViewModel(){
   }
 
-  void setEamil(String email){
-   this._email = email;
+  void setEmail(String email){
+    this._email = email;
+    notifyListeners();
   }
+
   void setPassword(String password){
     this._password = password;
+    notifyListeners();
+  }
+
+  void setInfoText(String infoText){
+    this._infoText = infoText;
+    notifyListeners();
+  }
+
+  Future<UserCredential> createUser( ) async {
+    // メール/パスワードでユーザー登録
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+      email: this._email,
+      password: this._password,
+    );
+    return userCredential;
   }
 
   Future<UserCredential> doLogin( ) async {
