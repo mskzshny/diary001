@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+
 import 'diary-page.dart';
+import 'add-post-view-model.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -25,8 +28,6 @@ class _AddPostPageState extends State<AddPostPage> {
   // ユーザー情報
   final User user;
 
-  // 入力した投稿メッセージ
-  String messageText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +49,7 @@ class _AddPostPageState extends State<AddPostPage> {
                 maxLines: null,
                 onChanged: (String value) {
                   setState(() {
-                    messageText = value;
+                    Provider.of<AddPostViewModel>(context, listen: false).setMessageText(value);
                   });
                 },
               ),
@@ -59,28 +60,10 @@ class _AddPostPageState extends State<AddPostPage> {
                   textColor: Colors.white,
                   child: Text('投稿'),
                   onPressed: () async {
-                    final postedDate =
-                        Timestamp.fromDate(DateTime.now()); // 現在の日時
-                    final yyyy = DateFormat('yyyy').format(postedDate.toDate());
-                    final mm = DateFormat('MM').format(postedDate.toDate());
-                    final dd = DateFormat('dd').format(postedDate.toDate());
-
-                    // 投稿メッセージ用ドキュメント作成
-                    debugPrint( "postedDate : " + DateFormat('yyyy/MM/dd HH:mm').format(postedDate.toDate()) );
-                    logger.v("Verbose log");
-                    await FirebaseFirestore.instance.collection('diary').doc(DateFormat('yyyyMMdd').format(postedDate.toDate())+user.uid)
-                      .set({
-                        'user_uid': user.uid,
-                        'diary': messageText,
-                        'diary_date': postedDate,
-                        'yyyy': yyyy,
-                        'mm': mm,
-                        'dd': dd
-                      })
-                      .then((value) => print("post Added"))
-                      .catchError((error) => print("Failed to add user: $error"));
+                    final postedDate = Timestamp.fromDate(DateTime.now()); // 現在の日時
+                    Provider.of<AddPostViewModel>(context, listen: false).postDiary(user,postedDate);
                     // 1つ前の画面に戻る
-                    callDiaryPage(context,user);
+                    DiaryPage.callDiaryPage(context,user);
                   },
                 ),
               )
@@ -90,4 +73,21 @@ class _AddPostPageState extends State<AddPostPage> {
       ),
     );
   }
+}
+
+void callAddPostPage(BuildContext context, User user) async {
+  await Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) {
+      // ユーザー情報を渡す
+      return MultiProvider(
+        providers: [
+          // Injects HomeViewModel into this widgets.
+          ChangeNotifierProvider(create: (_) => AddPostViewModel(user)),
+        ],
+        child: AddPostPage(user)
+      );
+    }),
+    (Route<dynamic> route) => false,
+    );
 }

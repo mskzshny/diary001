@@ -59,7 +59,8 @@ class DiaryPage extends StatelessWidget  {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(8),
-            child: Text(Provider.of<DiaryViewModel>(context).diaryType+" ログイン情報：${user.email}")
+            // child: Text(Provider.of<DiaryViewModel>(context).diaryType+" ログイン情報：${user.email}")
+            child: Text(Provider.of<DiaryViewModel>(context).diaryType)
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -108,31 +109,26 @@ class DiaryPage extends StatelessWidget  {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          // 投稿画面に遷移
-          await Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) {
-              return AddPostPage(user);
-            }),
-          );
-        },
+          callAddPostPage(context,user);
+        }
       )
     );
   }
-}
 
-void callDiaryPage(BuildContext context, User user) async {
-  await Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) {
-      // ユーザー情報を渡す
-      return MultiProvider(
-        providers: [
-          // Injects HomeViewModel into this widgets.
-          ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
-        ],
-        child: DiaryPage(user)
+  static void callDiaryPage(BuildContext context, User user) async {
+    await Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) {
+        // ユーザー情報を渡す
+        return MultiProvider(
+          providers: [
+            // Injects HomeViewModel into this widgets.
+            ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
+          ],
+          child: DiaryPage(user)
+        );
+      }),
+      (Route<dynamic> route) => false,
       );
-    }),
-    (Route<dynamic> route) => false,
-    );
+  }
 }

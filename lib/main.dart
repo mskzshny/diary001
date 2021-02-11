@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'page/login-page.dart';
+import 'page/loading-page.dart';
 
 void main() async{
   // If you're running an application and need to access the binary messenger before `runApp()` has been called (for example, during plugin initialization), then you need to explicitly call the `WidgetsFlutterBinding.ensureInitialized()` first.
@@ -17,7 +17,7 @@ class DiaryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
+    var materialApp = MaterialApp(
       // 右上に表示される"debug"ラベルを消す
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
@@ -43,8 +43,9 @@ class DiaryApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // ログイン画面を表示
-      home: LoginPage()
-   
+      home: LoadingPage(context: context, title: 'Diary001'),
+    
     );
+    return materialApp;
   }
 }
