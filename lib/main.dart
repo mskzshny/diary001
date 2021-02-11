@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'page/loading-page.dart';
 
 void main() async{
@@ -12,6 +14,8 @@ void main() async{
   // 最初に表示するWidget
   runApp(DiaryApp());
 }
+
+
 
 class DiaryApp extends StatelessWidget {
   @override

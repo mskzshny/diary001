@@ -30,13 +30,19 @@ class DiaryPage extends StatelessWidget  {
         title: Text("Diary 001"),
         actions:[
           IconButton(
-            icon: Icon(Icons.today),
+            icon: Icon(Icons.arrow_back),
             color: Colors.white,
+            onPressed: Provider.of<DiaryViewModel>(context, listen: false).getPrevDiary,
           ),
           IconButton(
             icon: Icon(Icons.today),
             color: Colors.white,
             onPressed: Provider.of<DiaryViewModel>(context, listen: false).getTodayDiary,
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            color: Colors.white,
+            onPressed: Provider.of<DiaryViewModel>(context, listen: false).getTomorrowDiary,
           ),
           IconButton(
             icon: Icon(Icons.new_releases),
@@ -56,7 +62,7 @@ class DiaryPage extends StatelessWidget  {
           Container(
             padding: EdgeInsets.all(8),
             // child: Text(Provider.of<DiaryViewModel>(context).diaryType+" ログイン情報：${user.email}")
-            child: Text(Provider.of<DiaryViewModel>(context).diaryType)
+            child: Text("これまでの"+DateFormat('MM月dd日').format(Provider.of<DiaryViewModel>(context).displayDate.toDate()))
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -82,7 +88,11 @@ class DiaryPage extends StatelessWidget  {
                             title: Text(document['diary']),
                             subtitle: Text(formattedDate),
                           ),
-                          onTap: Provider.of<DiaryViewModel>(context, listen: false).incrementCounter
+                          onTap: Provider.of<DiaryViewModel>(context, listen: false).incrementCounter,
+                          onLongPress: () {
+                            logger.v("onLongPress");
+                            callAddPostPage(context,user,document);
+                          },
                         )
                       );
                     }).toList(),
@@ -105,7 +115,7 @@ class DiaryPage extends StatelessWidget  {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          callAddPostPage(context,user);
+          callAddPostPage(context,user,null);
         }
       )
     );

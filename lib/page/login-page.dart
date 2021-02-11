@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'diary-page.dart';
+import 'diary-view-model.dart';
 import 'login-view-model.dart';
 
 var logger = Logger(
@@ -15,20 +16,48 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 
   static void callLoginPage(BuildContext context) async {
-    await Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) {
-        // ユーザー情報を渡す
-        return MultiProvider(
-          providers: [
-            // Injects HomeViewModel into this widgets.
-            ChangeNotifierProvider(create: (_) => LoginViewModel()),
-          ],
-          child: LoginPage()
-        );
-      }),
-      (Route<dynamic> route) => false,
-      );
+    // ログイン状態の確認
+    await FirebaseAuth.instance.setPersistence(Persistence.SESSION);
+    User user = FirebaseAuth.instance.currentUser;
+
+    // user情報があるなら、日記のページへ。
+    if( user != null ){
+      logger.v("user available : " + user.toString() );
+
+      //画面遷移
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) {
+          // ユーザー情報を渡す
+          return MultiProvider(
+            providers: [
+              // Injects HomeViewModel into this widgets.
+              ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
+            ],
+            child: DiaryPage(user)
+          );
+        }),
+        (Route<dynamic> route) => false,
+      );    
+    }
+    else{
+
+      //画面遷移
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) {
+          // ユーザー情報を渡す
+          return MultiProvider(
+            providers: [
+              // Injects HomeViewModel into this widgets.
+              ChangeNotifierProvider(create: (_) => LoginViewModel()),
+            ],
+            child: LoginPage()
+          );
+        }),
+        (Route<dynamic> route) => false,
+      );    
+    }
   }
 }
 

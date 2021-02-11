@@ -46,7 +46,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
     // ④終了時の処理
     sub.onDone(() {
-      print("Done");
       logger.v("build : context : " + this.context.toString());
       sub.cancel();
       _current = 0;
@@ -77,4 +76,5 @@ class _LoadingPageState extends State<LoadingPage> {
       ),
     );
   }
+
 }

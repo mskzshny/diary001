@@ -23,7 +23,7 @@ class LoginViewModel extends ChangeNotifier {
   String _infoText = "";
   String get infoText => _infoText;
 
-  LoginViewModel(){
+  LoginViewModel() {
   }
 
   void setEmail(String email){

@@ -17,6 +17,7 @@ class DiaryViewModel extends ChangeNotifier {
   final User user;
 
   DiaryViewModel(this.user){
+    _displayDate = DateTime.now();
     this.getTodayDiary();
   }
 
@@ -29,6 +30,9 @@ class DiaryViewModel extends ChangeNotifier {
   String _diaryType = "";
   String get diaryType => _diaryType; 
 
+  DateTime _displayDate;
+  Timestamp get displayDate => Timestamp.fromDate(_displayDate); 
+
   void incrementCounter() {
     this._counter++;
     logger.v("provider.counter : " + this._counter.toString());
@@ -37,12 +41,43 @@ class DiaryViewModel extends ChangeNotifier {
 
   void getTodayDiary() {
     logger.v("provider.counter : getTodayDiary");
-    _diaryList = this.diaryMMddList();
+    var viewDate = Timestamp.fromDate(DateTime.now()); // 現在の日時
+    var yyyy = DateFormat('yyyy').format(viewDate.toDate());
+    var mm = DateFormat('MM').format(viewDate.toDate());
+    var dd = DateFormat('dd').format(viewDate.toDate());
+
+    _diaryList = this.diaryMMddList(yyyy,mm,dd);
     _diaryType = "1年前,2年前,3年前,,,の今日の記事";
+    _displayDate = viewDate.toDate();
     notifyListeners();
   }
 
-  void getLatestDiary() {
+  void getPrevDiary() {
+    Timestamp viewDate = Timestamp.fromDate(this._displayDate.add(Duration(days: 1) * -1));
+    var yyyy = DateFormat('yyyy').format(viewDate.toDate());
+    var mm = DateFormat('MM').format(viewDate.toDate());
+    var dd = DateFormat('dd').format(viewDate.toDate());
+
+    logger.v("provider.counter : getTodayDiary");
+    _diaryList = this.diaryMMddList(yyyy,mm,dd);
+    _diaryType = "これまでの今日の記事";
+    _displayDate = viewDate.toDate();
+    notifyListeners();
+  }
+
+  void getTomorrowDiary() {
+    Timestamp viewDate = Timestamp.fromDate(this._displayDate.add(Duration(days: 1) * 1));
+    var yyyy = DateFormat('yyyy').format(viewDate.toDate());
+    var mm = DateFormat('MM').format(viewDate.toDate());
+    var dd = DateFormat('dd').format(viewDate.toDate());
+
+    logger.v("provider.counter : getTodayDiary");
+    _diaryList = this.diaryMMddList(yyyy,mm,dd);
+    _diaryType = "これまでの今日の記事";
+    _displayDate = viewDate.toDate();
+    notifyListeners();
+  }
+    void getLatestDiary() {
     logger.v("provider.counter : getTodayDiary");
     _diaryList = this.diaryLatestList();
     _diaryType = "直近の日記";
@@ -50,12 +85,7 @@ class DiaryViewModel extends ChangeNotifier {
 
   }
 
-  Stream<QuerySnapshot> diaryMMddList (){
-    var viewDate = Timestamp.fromDate(DateTime.now()); // 現在の日時
-    var yyyy = DateFormat('yyyy').format(viewDate.toDate());
-    var mm = DateFormat('MM').format(viewDate.toDate());
-    var dd = DateFormat('dd').format(viewDate.toDate());
-
+  Stream<QuerySnapshot> diaryMMddList (String yyyy, String mm, String dd){
 
     return FirebaseFirestore.instance
         .collection('diary')

@@ -28,66 +28,64 @@ class _AddPostPageState extends State<AddPostPage> {
   // ユーザー情報
   final User user;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('チャット投稿'),
       ),
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // 投稿メッセージ入力
-              TextFormField(
-                decoration: InputDecoration(labelText: '投稿メッセージ'),
-                // 複数行のテキスト入力
-                keyboardType: TextInputType.multiline,
-                // 最大3行
-                maxLines: null,
-                onChanged: (String value) {
-                  setState(() {
-                    Provider.of<AddPostViewModel>(context, listen: false).setMessageText(value);
-                  });
+      body: Container(
+        padding: EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            // 投稿メッセージ入力
+            TextFormField(
+              decoration: InputDecoration(labelText: '投稿メッセージ'),
+              // 複数行のテキスト入力
+              keyboardType: TextInputType.multiline,
+              // 最大3行
+              maxLines: null,
+              onChanged: (String value) {
+                setState(() {
+                  //Provider.of<AddPostViewModel>(context, listen: false).setMessageText(value);
+                });
+              },
+              controller: Provider.of<AddPostViewModel>(context, listen: false).diaryTextController
+            ),
+            Container(
+              width: double.infinity,
+              child: RaisedButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: Text('投稿'),
+                onPressed: () async {
+                  final postedDate = Timestamp.fromDate(DateTime.now()); // 現在の日時
+                  Provider.of<AddPostViewModel>(context, listen: false).postDiary(user,postedDate);
+                  // 1つ前の画面に戻る
+                  DiaryPage.callDiaryPage(context,user);
                 },
               ),
-              Container(
-                width: double.infinity,
-                child: RaisedButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  child: Text('投稿'),
-                  onPressed: () async {
-                    final postedDate = Timestamp.fromDate(DateTime.now()); // 現在の日時
-                    Provider.of<AddPostViewModel>(context, listen: false).postDiary(user,postedDate);
-                    // 1つ前の画面に戻る
-                    DiaryPage.callDiaryPage(context,user);
-                  },
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-void callAddPostPage(BuildContext context, User user) async {
-  await Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) {
+void callAddPostPage(BuildContext context, User user, DocumentSnapshot document) async {
+  await Navigator.push(context,
+    MaterialPageRoute<void>(builder: (context) {
       // ユーザー情報を渡す
       return MultiProvider(
         providers: [
           // Injects HomeViewModel into this widgets.
-          ChangeNotifierProvider(create: (_) => AddPostViewModel(user)),
+          ChangeNotifierProvider(create: (_) => AddPostViewModel(user,document)),
         ],
         child: AddPostPage(user)
       );
-    }),
-    (Route<dynamic> route) => false,
+    })
     );
 }
