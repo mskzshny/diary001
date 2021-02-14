@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
@@ -17,46 +19,41 @@ class LoginPage extends StatefulWidget {
 
   static void callLoginPage(BuildContext context) async {
     // ログイン状態の確認
-    await FirebaseAuth.instance.setPersistence(Persistence.SESSION);
+    // OSごとで判定するプロパティも提供されている
+    if (kIsWeb) {
+      await FirebaseAuth.instance.setPersistence(Persistence.SESSION);
+    }
     User user = FirebaseAuth.instance.currentUser;
 
     // user情報があるなら、日記のページへ。
-    if( user != null ){
-      logger.v("user available : " + user.toString() );
+    if (user != null) {
+      logger.v("user available : " + user.toString());
 
       //画面遷移
       await Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) {
           // ユーザー情報を渡す
-          return MultiProvider(
-            providers: [
-              // Injects HomeViewModel into this widgets.
-              ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
-            ],
-            child: DiaryPage(user)
-          );
+          return MultiProvider(providers: [
+            // Injects HomeViewModel into this widgets.
+            ChangeNotifierProvider(create: (_) => DiaryViewModel(user)),
+          ], child: DiaryPage(user));
         }),
         (Route<dynamic> route) => false,
-      );    
-    }
-    else{
-
+      );
+    } else {
       //画面遷移
       await Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) {
           // ユーザー情報を渡す
-          return MultiProvider(
-            providers: [
-              // Injects HomeViewModel into this widgets.
-              ChangeNotifierProvider(create: (_) => LoginViewModel()),
-            ],
-            child: LoginPage()
-          );
+          return MultiProvider(providers: [
+            // Injects HomeViewModel into this widgets.
+            ChangeNotifierProvider(create: (_) => LoginViewModel()),
+          ], child: LoginPage());
         }),
         (Route<dynamic> route) => false,
-      );    
+      );
     }
   }
 }
@@ -84,7 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                 onChanged: (String value) {
                   setState(() {
                     // email = value;
-                    Provider.of<LoginViewModel>(context, listen: false).setEmail(value);
+                    Provider.of<LoginViewModel>(context, listen: false)
+                        .setEmail(value);
                   });
                 },
               ),
@@ -95,14 +93,16 @@ class _LoginPageState extends State<LoginPage> {
                 onChanged: (String value) {
                   setState(() {
                     //password = value;
-                    Provider.of<LoginViewModel>(context, listen: false).setPassword(value);
+                    Provider.of<LoginViewModel>(context, listen: false)
+                        .setPassword(value);
                   });
                 },
               ),
               Container(
                 padding: EdgeInsets.all(8),
                 // メッセージ表示
-                child: Text( Provider.of<LoginViewModel>(context, listen: false).infoText),
+                child: Text(Provider.of<LoginViewModel>(context, listen: false)
+                    .infoText),
               ),
               Container(
                 width: double.infinity,
@@ -112,16 +112,20 @@ class _LoginPageState extends State<LoginPage> {
                   textColor: Colors.white,
                   child: Text('ユーザー登録'),
                   onPressed: () async {
-                    logger.v("onPressed: " );
+                    logger.v("onPressed: ");
                     try {
-                      UserCredential userCredential = await Provider.of<LoginViewModel>(context, listen: false).createUser();
+                      UserCredential userCredential =
+                          await Provider.of<LoginViewModel>(context,
+                                  listen: false)
+                              .createUser();
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      DiaryPage.callDiaryPage(context,userCredential.user);
+                      DiaryPage.callDiaryPage(context, userCredential.user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
-                        Provider.of<LoginViewModel>(context, listen: false).setInfoText("登録に失敗しました：${e.message}");
+                        Provider.of<LoginViewModel>(context, listen: false)
+                            .setInfoText("登録に失敗しました：${e.message}");
                       });
                     }
                   },
@@ -134,17 +138,21 @@ class _LoginPageState extends State<LoginPage> {
                   textColor: Colors.blue,
                   child: Text('ログイン'),
                   onPressed: () async {
-                    logger.v("onPressed: " );
+                    logger.v("onPressed: ");
                     try {
                       // メール/パスワードでログイン
-                      UserCredential userCredential = await Provider.of<LoginViewModel>(context, listen: false).doLogin();
+                      UserCredential userCredential =
+                          await Provider.of<LoginViewModel>(context,
+                                  listen: false)
+                              .doLogin();
                       // ログインに成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      DiaryPage.callDiaryPage(context,userCredential.user);
+                      DiaryPage.callDiaryPage(context, userCredential.user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
-                        Provider.of<LoginViewModel>(context, listen: false).setInfoText("ログインに失敗しました：${e.message}");
+                        Provider.of<LoginViewModel>(context, listen: false)
+                            .setInfoText("ログインに失敗しました：${e.message}");
                       });
                     }
                   },
@@ -156,9 +164,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-
 }
-
-
-

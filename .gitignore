@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+*.lock
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -46,3 +47,10 @@ app.*.map.json
 android/
 ios/
 build/
+
+
+# diary_001
+lib/mics
+
+# ios
+./ios/Runner.xcworkspace
