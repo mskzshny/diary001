@@ -34,11 +34,18 @@ class DiaryPage extends StatelessWidget {
           ),
           // 今日の日記を表示
           IconButton(
-            icon: Icon(Icons.today),
-            color: Colors.white,
-            onPressed: Provider.of<DiaryViewModel>(context, listen: false)
-                .getTodayDiary,
-          ),
+              icon: Icon(Icons.today),
+              color: Colors.white,
+              //onPressed: Provider.of<DiaryViewModel>(context, listen: false)
+              //    .getTodayDiary,
+              onPressed: (contect) async {
+                final DateTime picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: new DateTime(2016),
+                    lastDate: new DateTime.now().add(new Duration(days: 360)));
+                // if (picked != null) setState(() => _date = picked);
+              };),
           // 次の日の日記を表示
           IconButton(
             icon: Icon(Icons.arrow_forward),
@@ -118,6 +125,16 @@ class DiaryPage extends StatelessWidget {
             onPressed: () async {
               AddPostPage.setCurrentThisPage(context, user, null);
             }));
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: new DateTime(2016),
+        lastDate: new DateTime.now().add(new Duration(days: 360))
+    );
+    //if(picked != null) setState(() => _date = picked);
   }
 
   static void setCurrentThisPage(BuildContext context, User user) async {
