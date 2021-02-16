@@ -38,14 +38,7 @@ class DiaryPage extends StatelessWidget {
               color: Colors.white,
               //onPressed: Provider.of<DiaryViewModel>(context, listen: false)
               //    .getTodayDiary,
-              onPressed: (contect) async {
-                final DateTime picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: new DateTime(2016),
-                    lastDate: new DateTime.now().add(new Duration(days: 360)));
-                // if (picked != null) setState(() => _date = picked);
-              };),
+              onPressed: () => _selectDate(context)),
           // 次の日の日記を表示
           IconButton(
             icon: Icon(Icons.arrow_forward),
@@ -127,14 +120,17 @@ class DiaryPage extends StatelessWidget {
             }));
   }
 
+  // 表示する日付の選択。
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: new DateTime(2016),
-        lastDate: new DateTime.now().add(new Duration(days: 360))
-    );
-    //if(picked != null) setState(() => _date = picked);
+        lastDate: new DateTime.now().add(new Duration(days: 360)));
+    if (picked != null) {
+      Provider.of<DiaryViewModel>(context, listen: false)
+          .getSelectedDateDiary(picked);
+    }
   }
 
   static void setCurrentThisPage(BuildContext context, User user) async {

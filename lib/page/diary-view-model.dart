@@ -78,6 +78,20 @@ class DiaryViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 指定する日付の日記を取得する。
+  void getSelectedDateDiary(DateTime selectedDate) {
+    logger.v("DiaryViewModel.getSelectedDateDiary");
+    Timestamp viewDate = Timestamp.fromDate(selectedDate);
+    var yyyy = DateFormat('yyyy').format(viewDate.toDate());
+    var mm = DateFormat('MM').format(viewDate.toDate());
+    var dd = DateFormat('dd').format(viewDate.toDate());
+
+    _diaryList = this.diaryMMddList(yyyy, mm, dd);
+    _diaryType = "これまでの今日の記事";
+    _displayDate = viewDate.toDate();
+    notifyListeners();
+  }
+
   // 直近の日記を取得する。
   void getLatestDiary() {
     logger.v("DiaryViewModel.getTodayDiary");
