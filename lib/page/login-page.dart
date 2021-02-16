@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 
-  static void callLoginPage(BuildContext context) async {
+  static void setCurrentThisPage(BuildContext context) async {
     // ログイン状態の確認
     // OSごとで判定するプロパティも提供されている
     if (kIsWeb) {
@@ -120,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                               .createUser();
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      DiaryPage.callDiaryPage(context, userCredential.user);
+                      DiaryPage.setCurrentThisPage(
+                          context, userCredential.user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
@@ -147,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                               .doLogin();
                       // ログインに成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      DiaryPage.callDiaryPage(context, userCredential.user);
+                      DiaryPage.setCurrentThisPage(
+                          context, userCredential.user);
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {

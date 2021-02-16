@@ -20,6 +20,17 @@ class AddPostPage extends StatefulWidget {
   final User user;
   @override
   _AddPostPageState createState() => _AddPostPageState(user);
+
+  static void setCurrentThisPage(
+      BuildContext context, User user, DocumentSnapshot document) async {
+    await Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+      // ユーザー情報を渡す
+      return MultiProvider(providers: [
+        // Injects HomeViewModel into this widgets.
+        ChangeNotifierProvider(create: (_) => AddPostViewModel(user, document)),
+      ], child: AddPostPage(user));
+    }));
+  }
 }
 
 class _AddPostPageState extends State<AddPostPage> {
@@ -66,7 +77,7 @@ class _AddPostPageState extends State<AddPostPage> {
                   Provider.of<AddPostViewModel>(context, listen: false)
                       .postDiary(user, postedDate);
                   // 1つ前の画面に戻る
-                  DiaryPage.callDiaryPage(context, user);
+                  DiaryPage.setCurrentThisPage(context, user);
                 },
               ),
             ),
@@ -75,15 +86,4 @@ class _AddPostPageState extends State<AddPostPage> {
       ),
     );
   }
-}
-
-void callAddPostPage(
-    BuildContext context, User user, DocumentSnapshot document) async {
-  await Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-    // ユーザー情報を渡す
-    return MultiProvider(providers: [
-      // Injects HomeViewModel into this widgets.
-      ChangeNotifierProvider(create: (_) => AddPostViewModel(user, document)),
-    ], child: AddPostPage(user));
-  }));
 }

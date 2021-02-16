@@ -10,9 +10,8 @@ var logger = Logger(
 );
 
 // ログイン画面用Widget
-class LoadingPage extends StatefulWidget  {
-  
-  LoadingPage( {Key key, this.title, this.context}) : super(key: key);
+class LoadingPage extends StatefulWidget {
+  LoadingPage({Key key, this.title, this.context}) : super(key: key);
 
   final String title;
   final BuildContext context;
@@ -21,8 +20,7 @@ class LoadingPage extends StatefulWidget  {
 }
 
 class _LoadingPageState extends State<LoadingPage> {
-
-  _LoadingPageState(){
+  _LoadingPageState() {
     this.startTimer();
   }
 
@@ -49,7 +47,7 @@ class _LoadingPageState extends State<LoadingPage> {
       logger.v("build : context : " + this.context.toString());
       sub.cancel();
       _current = 0;
-      LoginPage.callLoginPage(this.context);
+      LoginPage.setCurrentThisPage(this.context);
     });
   }
 
@@ -61,20 +59,10 @@ class _LoadingPageState extends State<LoadingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // ⑤現在のカウントを表示
-            Text("loading..." ),
-            /*
-            // ⑦カウントダウン関数を実行するボタン
-            RaisedButton(
-              onPressed: () {
-                // startTimer();
-                //LoginPage.callLoginPage(context);
-              },
-              child: Text("start"),
-            ),*/
+            Text("loading..."),
           ],
         ),
       ),
     );
   }
-
 }
