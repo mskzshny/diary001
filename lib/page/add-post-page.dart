@@ -43,7 +43,7 @@ class _AddPostPageState extends State<AddPostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('チャット投稿'),
+        title: Text('日記入力'),
       ),
       body: Container(
         padding: EdgeInsets.all(32),
@@ -52,7 +52,7 @@ class _AddPostPageState extends State<AddPostPage> {
           children: <Widget>[
             Expanded(
                 child: TextFormField(
-                    decoration: InputDecoration(labelText: '投稿メッセージ'),
+                    decoration: InputDecoration(labelText: '保存'),
                     // 複数行のテキスト入力
                     keyboardType: TextInputType.multiline,
                     // 最大3行
