@@ -77,7 +77,7 @@ class _AddPostPageState extends State<AddPostPage> {
                   Provider.of<AddPostViewModel>(context, listen: false)
                       .postDiary(user, postedDate);
                   // 1つ前の画面に戻る
-                  DiaryPage.setCurrentThisPage(context, user);
+                  DiaryPage.setBackThisPage(context, user);
                 },
               ),
             ),

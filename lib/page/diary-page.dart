@@ -133,4 +133,9 @@ class DiaryPage extends StatelessWidget {
       (Route<dynamic> route) => false,
     );
   }
+
+  static void setBackThisPage(BuildContext context, User user) async {
+    await Navigator.pop(context);
+    // Provider.of<DiaryViewModel>(context, listen: false).reflesh();
+  }
 }

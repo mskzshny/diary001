@@ -7,51 +7,55 @@ import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+// ログインデータ
 class LoginViewModel extends ChangeNotifier {
-
+  // メールアドレス
   String _email = "";
   String get email => _email;
 
+  // パスワード
   String _password = "";
   String get password => _password;
 
+  // エラーメッセージ
   String _infoText = "";
   String get infoText => _infoText;
 
-  LoginViewModel() {
-  }
+  LoginViewModel() {}
 
-  void setEmail(String email){
+  void setEmail(String email) {
     this._email = email;
     notifyListeners();
   }
 
-  void setPassword(String password){
+  void setPassword(String password) {
     this._password = password;
     notifyListeners();
   }
 
-  void setInfoText(String infoText){
+  void setInfoText(String infoText) {
     this._infoText = infoText;
     notifyListeners();
   }
 
-  Future<UserCredential> createUser( ) async {
+  // ユーザ作成
+  Future<UserCredential> createUser() async {
     // メール/パスワードでユーザー登録
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+    final UserCredential userCredential =
+        await auth.createUserWithEmailAndPassword(
       email: this._email,
       password: this._password,
     );
     return userCredential;
   }
 
-  Future<UserCredential> doLogin( ) async {
+  // ログイン
+  Future<UserCredential> doLogin() async {
     // メール/パスワードでログイン
     final FirebaseAuth auth = FirebaseAuth.instance;
     final UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -60,5 +64,4 @@ class LoginViewModel extends ChangeNotifier {
     );
     return userCredential;
   }
-
 }
