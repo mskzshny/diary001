@@ -25,35 +25,33 @@ class DiaryPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(title: Text("Diary 001"), actions: [
+          // 前の日の日記を表示
           IconButton(
             icon: Icon(Icons.arrow_back),
             color: Colors.white,
             onPressed: Provider.of<DiaryViewModel>(context, listen: false)
                 .getPrevDiary,
           ),
+          // 今日の日記を表示
           IconButton(
             icon: Icon(Icons.today),
             color: Colors.white,
             onPressed: Provider.of<DiaryViewModel>(context, listen: false)
                 .getTodayDiary,
           ),
+          // 次の日の日記を表示
           IconButton(
             icon: Icon(Icons.arrow_forward),
             color: Colors.white,
             onPressed: Provider.of<DiaryViewModel>(context, listen: false)
                 .getTomorrowDiary,
           ),
+          // 最新の日記を表示
           IconButton(
             icon: Icon(Icons.new_releases),
             color: Colors.white,
             onPressed: Provider.of<DiaryViewModel>(context, listen: false)
                 .getLatestDiary,
-          ),
-          IconButton(
-            icon: Icon(Icons.android),
-            color: Colors.white,
-            onPressed: Provider.of<DiaryViewModel>(context, listen: false)
-                .incrementCounter,
           ),
         ]),
         body: Column(
@@ -70,11 +68,15 @@ class DiaryPage extends StatelessWidget {
                 stream: Provider.of<DiaryViewModel>(context).diaryList,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  String loadingMessage = '読込中...';
-                  // データが取得できた場合
+                  String loadingMessage = 'loading...';
+                  // Diaryがない場合、取得できなかった場合。
+                  loadingMessage = 'no data';
+
+                  // データ取得判定
                   if (snapshot.hasData) {
+                    // データが取得できた場合
                     final List<DocumentSnapshot> documents = snapshot.data.docs;
-                    // 取得した投稿メッセージ一覧を元にリスト表示
+                    // 取得したDiary一覧をリスト表示
                     return ListView(
                       children: documents.map((document) {
                         String formattedDate = "";
@@ -90,9 +92,6 @@ class DiaryPage extends StatelessWidget {
                             title: Text(document['diary']),
                             subtitle: Text(formattedDate),
                           ),
-                          onTap: Provider.of<DiaryViewModel>(context,
-                                  listen: false)
-                              .incrementCounter,
                           onLongPress: () {
                             logger.v("onLongPress");
                             AddPostPage.setCurrentThisPage(
@@ -102,8 +101,8 @@ class DiaryPage extends StatelessWidget {
                       }).toList(),
                     );
                   } else {
+                    // Diaryがない場合、取得できなかった場合。
                     logger.v("no data");
-                    loadingMessage = 'no data';
                   }
                   // データが読込中の場合
                   return Center(

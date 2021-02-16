@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:quiver/async.dart'; // ①quiver.asyncライブラリを利用
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
+import 'package:quiver/async.dart';
+
 import 'login-page.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-// ログイン画面用Widget
+// ローディング画面用Widget
 class LoadingPage extends StatefulWidget {
   LoadingPage({Key key, this.title, this.context}) : super(key: key);
 
@@ -24,11 +23,11 @@ class _LoadingPageState extends State<LoadingPage> {
     this.startTimer();
   }
 
-  // ②カウントを示すインスタンス変数
+  // カウントを示すインスタンス変数
   int _start = 0;
   int _current = 0;
 
-  // ③ カウントダウン処理を行う関数を定義
+  // カウントダウン処理を行う関数を定義
   void startTimer() {
     CountdownTimer countDownTimer = new CountdownTimer(
       new Duration(seconds: _start), //初期値
@@ -42,11 +41,12 @@ class _LoadingPageState extends State<LoadingPage> {
       });
     });
 
-    // ④終了時の処理
+    // 終了時の処理
     sub.onDone(() {
       logger.v("build : context : " + this.context.toString());
       sub.cancel();
       _current = 0;
+      // ログインページの表示
       LoginPage.setCurrentThisPage(this.context);
     });
   }
@@ -58,7 +58,7 @@ class _LoadingPageState extends State<LoadingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // ⑤現在のカウントを表示
+            // ローティングページの表示
             Text("loading..."),
           ],
         ),
