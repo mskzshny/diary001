@@ -89,8 +89,8 @@ class DiaryPage extends StatelessWidget {
                         return Card(
                             child: InkWell(
                           child: ListTile(
-                            title: Text(document['diary']),
-                            subtitle: Text(formattedDate),
+                            title: Text(formattedDate),
+                            subtitle: Text(document['diary']),
                           ),
                           onLongPress: () {
                             logger.v("onLongPress");

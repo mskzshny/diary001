@@ -43,7 +43,7 @@ class _AddPostPageState extends State<AddPostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('日記入力'),
+        title: Text('日記を書く'),
       ),
       body: Container(
         padding: EdgeInsets.all(32),
@@ -52,7 +52,7 @@ class _AddPostPageState extends State<AddPostPage> {
           children: <Widget>[
             Expanded(
                 child: TextFormField(
-                    decoration: InputDecoration(labelText: '保存'),
+                    decoration: InputDecoration(labelText: ''),
                     // 複数行のテキスト入力
                     keyboardType: TextInputType.multiline,
                     // 最大3行
@@ -70,7 +70,7 @@ class _AddPostPageState extends State<AddPostPage> {
               child: RaisedButton(
                 color: Colors.blue,
                 textColor: Colors.white,
-                child: Text('投稿'),
+                child: Text('保存'),
                 onPressed: () async {
                   final postedDate =
                       Timestamp.fromDate(DateTime.now()); // 現在の日時
