@@ -47,8 +47,8 @@ android {
 
         // 追記
         multiDexEnabled true
-        versionCode 18
-        versionName "1.0.18"
+        versionCode 21
+        versionName "1.0.21"
     }
 
     // 追記
